@@ -1,0 +1,10 @@
+[Public]
+Object=(Name=ItemPickupAnnouncer.MutItemPickupAnnouncer,Class=Class,MetaClass=Engine.Mutator,Description="Item Pickup Announcer,Announces items being picked up by other members of your team")
+
+[IPA_PickupMessage]
+PickedUp="{1} picked up {2}"
+
+[MutItemPickupAnnouncer]
+MutatorName="Item Pickup Announcer"
+MutatorDescription="Announces items being picked up by other members of your team"
+
