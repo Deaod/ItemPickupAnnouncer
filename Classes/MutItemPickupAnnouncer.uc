@@ -81,7 +81,7 @@ function PreBeginPlay() {
 		IncludedExactClasses.Length == 0 &&
 		ExcludedExactClasses.Length == 0
 	) {
-		IncludedBaseClasses.Insert(0, 7);
+		IncludedBaseClasses.Insert(0, 11);
 		IncludedBaseClasses[0]='ShieldBelt';
 		IncludedBaseClasses[1]='UT_ShieldBelt';
 		IncludedBaseClasses[2]='Armor';
@@ -89,6 +89,10 @@ function PreBeginPlay() {
 		IncludedBaseClasses[4]='ThighPads';
 		IncludedBaseClasses[5]='HealthPack';
 		IncludedBaseClasses[6]='UDamage';
+		IncludedBaseClasses[7]='UT_Invisibility';
+		IncludedBaseClasses[8]='Invisibility';
+		IncludedBaseClasses[9]='UT_JumpBoots';
+		IncludedBaseClasses[10]='JumpBoots';
 		SaveConfig();
 	}
 
@@ -107,4 +111,8 @@ defaultproperties {
 	IncludedBaseClasses=ThighPads
 	IncludedBaseClasses=HealthPack
 	IncludedBaseClasses=UDamage
+	IncludedBaseClasses=UT_Invisibility
+	IncludedBaseClasses=Invisibility
+	IncludedBaseClasses=UT_JumpBoots
+	IncludedBaseClasses=JumpBoots
 }
