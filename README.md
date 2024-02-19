@@ -35,6 +35,6 @@ IncludedBaseClasses=Invisibility
 IncludedBaseClasses=UT_Jumpboots
 IncludedBaseClasses=JumpBoots
 
-SpectatorMessageLifetime=6 // Pickup messages last twice as long as the default (3)
-SpectatorCustomYPos=120.0 // Custom Y position for the pickup message. Higher values move the message up
+SpectatorMessageLifetime=6 // Pickup messages last twice as long. Base game default = 3
+SpectatorCustomYPos=120.0 // Higher values move the message up. Base game default = 64.0
 ```
