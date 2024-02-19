@@ -8,6 +8,9 @@ var config array<name> IncludedBaseClasses;
 var config array<name> IncludedExactClasses;
 var config array<name> ExcludedExactClasses;
 
+var config float SpectatorMessageLifetime;
+var config float SpectatorCustomYPos;
+
 function bool IsBasedOnIncludedClass(Inventory Item) {
 	local int i;
 
@@ -62,6 +65,13 @@ function AnnounceItemPickup(PlayerReplicationInfo PRI, Object ItemClass) {
 				Level.Game.MessageMutator.MutatorBroadcastLocalizedMessage(self, P, Message, Sw, PRI1, PRI2, OptObj)
 			)
 		) {
+			if (P.IsA('Spectator') && class'IPA_SpectatorPickupMessage' != none) {
+				Message = class'IPA_SpectatorPickupMessage';
+				class'IPA_SpectatorPickupMessage'.default.Lifetime = SpectatorMessageLifetime;
+				class'IPA_SpectatorPickupMessage'.default.YPos = SpectatorCustomYPos;
+			} else {
+				Message = class'IPA_PickupMessage';
+			}
 			P.ReceiveLocalizedMessage(Message, Sw, PRI1, PRI2, OptObj);
 		}
 }
@@ -115,4 +125,7 @@ defaultproperties {
 	IncludedBaseClasses=Invisibility
 	IncludedBaseClasses=UT_JumpBoots
 	IncludedBaseClasses=JumpBoots
+
+	SpectatorMessageLifetime=6 // Pickup messages lasts twice as long as the default (3)
+	SpectatorCustomYPos=120.0 // Custom Y position for the pickup message. Higher values move the message up
 }

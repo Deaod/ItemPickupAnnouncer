@@ -39,6 +39,11 @@ static final function string ApplyParameters(
 	return Result$FormatString;
 }
 
+static function float GetOffset(int Switch, float YL, float ClipY )
+{
+	return ClipY - YL - (64.0/768)*ClipY;
+}
+
 static function string GetString(
 	optional int Switch, // always 0
 	optional PlayerReplicationInfo RelatedPRI_1, // player that picked up the item
