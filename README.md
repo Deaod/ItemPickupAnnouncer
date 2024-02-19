@@ -21,6 +21,7 @@ The mutator is configurable through the `UnrealTournament.ini` file. Below are t
 
 ### Example Configuration
 
+```
 [ItemPickupAnnouncer.MutItemPickupAnnouncer]
 IncludedBaseClasses=ShieldBelt
 IncludedBaseClasses=UT_ShieldBelt
@@ -34,5 +35,6 @@ IncludedBaseClasses=Invisibility
 IncludedBaseClasses=UT_Jumpboots
 IncludedBaseClasses=JumpBoots
 
-SpectatorMessageLifetime=6 // Pickup messages lasts twice as long as the default (3)
+SpectatorMessageLifetime=6 // Pickup messages last twice as long as the default (3)
 SpectatorCustomYPos=120.0 // Custom Y position for the pickup message. Higher values move the message up
+```
