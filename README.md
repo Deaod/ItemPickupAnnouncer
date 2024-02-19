@@ -38,3 +38,5 @@ IncludedBaseClasses=JumpBoots
 SpectatorMessageLifetime=6 // Pickup messages last twice as long. Base game default = 3
 SpectatorCustomYPos=120.0 // Higher values move the message up. Base game default = 64.0
 ```
+
+Original work by Deaod at https://github.com/Deaod/ItemPickupAnnouncer
