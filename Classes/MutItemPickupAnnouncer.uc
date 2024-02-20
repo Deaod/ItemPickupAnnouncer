@@ -8,6 +8,9 @@ var config array<name> IncludedBaseClasses;
 var config array<name> IncludedExactClasses;
 var config array<name> ExcludedExactClasses;
 
+var config float SpectatorMessageLifetime;
+var config float SpectatorCustomYPos;
+
 function bool IsBasedOnIncludedClass(Inventory Item) {
 	local int i;
 
@@ -43,27 +46,39 @@ function AnnounceItemPickup(PlayerReplicationInfo PRI, Object ItemClass) {
 
 	local class<LocalMessage> Message;
 	local int Sw;
+	local int SwSpectator;
 	local PlayerReplicationInfo PRI1;
 	local PlayerReplicationInfo PRI2;
 	local Object OptObj;
+	local int encodedLifetime;
+    local int encodedYPos;
+
+	encodedLifetime = FClamp(SpectatorMessageLifetime * 10, 0, 255);
+    encodedYPos = FClamp((SpectatorCustomYPos - 64) / 2, 0, 255);
+
+	SwSpectator = (encodedYPos << 8) | encodedLifetime;
 
 	Message = class'IPA_PickupMessage';
-	Sw = 0;
 	PRI1 = PRI;
 	PRI2 = none;
 	OptObj = ItemClass;
 
-	for (P = Level.PawnList; P != none; P = P.NextPawn)
-		if ((P.bIsPlayer || P.IsA('MessagingSpectator')) &&
-			(P != PRI.Owner) &&
-			(P.IsA('Spectator') || (Level.Game.bTeamGame && P.PlayerReplicationInfo.Team == PRI.Team)) &&
-			(
-				Level.Game.MessageMutator == none ||
-				Level.Game.MessageMutator.MutatorBroadcastLocalizedMessage(self, P, Message, Sw, PRI1, PRI2, OptObj)
-			)
-		) {
-			P.ReceiveLocalizedMessage(Message, Sw, PRI1, PRI2, OptObj);
-		}
+	for (P = Level.PawnList; P != none; P = P.NextPawn) {
+        if ((P.bIsPlayer || P.IsA('MessagingSpectator')) &&
+            (P != PRI.Owner) &&
+            (P.IsA('Spectator') || (Level.Game.bTeamGame && P.PlayerReplicationInfo.Team == PRI.Team)) &&
+            (
+                Level.Game.MessageMutator == none ||
+                Level.Game.MessageMutator.MutatorBroadcastLocalizedMessage(self, P, Message, Sw, PRI1, PRI2, OptObj)
+            )
+        ) {
+			if(P.IsA('Spectator')) {
+				P.ReceiveLocalizedMessage(Message, SwSpectator, PRI1, PRI2, OptObj);
+			} else {
+           	 	P.ReceiveLocalizedMessage(Message, Sw, PRI1, PRI2, OptObj);
+			}
+        }
+    }
 }
 
 function bool HandlePickupQuery(Pawn Other, Inventory Item, out byte bAllowPickup) {
@@ -115,4 +130,7 @@ defaultproperties {
 	IncludedBaseClasses=Invisibility
 	IncludedBaseClasses=UT_JumpBoots
 	IncludedBaseClasses=JumpBoots
+
+	SpectatorMessageLifetime=6.000000
+	SpectatorCustomYPos=120
 }
