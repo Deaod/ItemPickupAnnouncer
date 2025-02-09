@@ -39,44 +39,33 @@ static final function string ApplyParameters(
 	return Result$FormatString;
 }
 
-static function float GetOffset(int Switch, float YL, float ClipY) {
-    local int encodedLifetime;
-    local int encodedYPos;
-    local float SpectatorCustomYPos;
-
-    // Decode the settings from Switch
-    encodedLifetime = Switch & 255; // Get the lower 8 bits
-    encodedYPos = (Switch >> 8) & 255; // Get the next 8 bits
-
-    // Convert back to the original scales
-    SpectatorCustomYPos = (encodedYPos * 2) + 64; // Convert back to YPos
-
-    switch(encodedLifetime) {
-        case 0: // DefaultSettings
-            return ClipY - YL - (64.0/768)*ClipY; // Default Y position is 64
-        default:
-            return ClipY - YL - (SpectatorCustomYPos/768)*ClipY; // Use SpectatorCustomYPos for custom Y position
-    }
+static function float GetOffset(int Switch, float YL, float ClipY)
+{
+    local float BaseOffset;
+    local float MessageSpacing;
+    
+    // Base offset (original position)
+    BaseOffset = ClipY - YL - (64.0/768)*ClipY;
+    
+    // Vertical space between multiple messages so they don't overlap (adjust this value as needed)
+    MessageSpacing = 25.0;
+    
+    // Use Switch parameter for position
+    return BaseOffset - (Switch * MessageSpacing);
 }
 
 static function string GetString(
-    optional int Switch, // now used for settings
-    optional PlayerReplicationInfo RelatedPRI_1, // player that picked up the item
-    optional PlayerReplicationInfo RelatedPRI_2, // always none
-    optional Object OptionalObject // class of item that was picked up
+	optional int Switch, // always 0
+	optional PlayerReplicationInfo RelatedPRI_1, // player that picked up the item
+	optional PlayerReplicationInfo RelatedPRI_2, // always none
+	optional Object OptionalObject // class of item that was picked up
 ) {
-    local float decodedLifetime;
-
-    // Decode the lifetime from Switch
-    decodedLifetime = (Switch & 255) / 10.0; // Reverse the encoding process
-
-    // Set the Lifetime of the message based on decodedLifetime
-    default.Lifetime = decodedLifetime;
-
-    if (OptionalObject != none && RelatedPRI_1 != none)
-        return ApplyParameters(default.PickedUp, RelatedPRI_1.PlayerName, class<Inventory>(OptionalObject).default.ItemName);
+	if (OptionalObject != none && RelatedPRI_1 != none)
+		return ApplyParameters(default.PickedUp, RelatedPRI_1.PlayerName, class<Inventory>(OptionalObject).default.ItemName);
 }
 
 defaultproperties {
 	PickedUp="{1} picked up {2}"
+	Lifetime=3
+	bIsUnique=False
 }
